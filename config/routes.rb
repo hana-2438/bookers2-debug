@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'relationships/followings'
-  get 'relationships/followers'
   root to = 'homes#top'
   devise_for :users
   resources :books, only: [:index,:show,:edit,:create,:destroy,:update] do
