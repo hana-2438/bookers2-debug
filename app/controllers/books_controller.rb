@@ -7,12 +7,11 @@ class BooksController < ApplicationController
   end
 
   def index
-    to = Time.current.at_end_of_day
-    from = (to - 6.day).at_beginning_of_day
-    @books = Book.includes(:favorited_users).
-      sort_by {|x|
-      x.favorited_users.includes(:favorites).where(created_at: from...to).size
-      }.reverse
+    # 投稿一覧をいいねの合計数が多い順に並び替える
+    to  = Time.current.at_end_of_day
+    from  = (to - 6.day).at_beginning_of_day
+    @books = Book.includes(:favorites).sort_by {|x| x.favorites.where(created_at: from...to).size}.reverse
+    #infoテンプレのnewbook用 
     @book = Book.new
     @book_comment = BookComment.new
   end
