@@ -1,22 +1,28 @@
-<h1 id="room" data-room="<%= @room.id %>" data-user="<%= current_user.id %>">
-  <%= @user.name %> さんとのチャット</h1>
-  
-  
-<div class="message" style="width: 400px;">
-  <% @chats.each do |chat| %>
-    <% if chat.user_id == current_user.id %>
-      <p style="text-align: right;"><%= chat.message %></p>
-    <% else %>
-      <P style="text-align: left;"><%= chat.message %></P>
-    <% end %>
-  <% end %>
-</div>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6">
 
-<div class="errors">
-  <%= render "layouts/errors", obj: @chat %>
-</div>
 
-<%= form_with model: @chat,data: {remote: true} do |f| %>
-  <%= f.text_field :message %>
-  <%= f.hidden_field :room_id %>
-<% end %>
+      <h1><%= @user.name %> さんとのチャット</h1>
+
+
+      <div class="message" style="width: 400px;">
+        <% @chats.each do |chat| %>
+          <% if chat.user_id == current_user.id %>
+            <p style="text-align: left;"><%= chat.message %></p>
+          <% else %>
+            <P style="text-align: right;"><%= chat.message %></P>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="error-explanation"></div><!--エラーメッセージの表示-->
+
+      <%= form_with model: @chat, class: "js-form" do |f| %>
+        <%= f.text_field :message %>
+        <%= f.hidden_field :room_id %>
+        <%= f.submit "SEND", class:"btn btn-sm btn-success chat-btn" %>
+      <% end %>
+    </div>
+  </div>
+</div>

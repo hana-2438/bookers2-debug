@@ -33,7 +33,7 @@
                <%= link_to 'chatを始める', chat_path(user.id), class: "ml-3" %>
              <% end %>
          <% else %>
-           <%= link_to "フォローする", user_relationships_path(user.id), method: :post, class:"btn btn-success　btn-sm" %>
+           <%= link_to "フォローする", user_relationships_path(user.id), method: :post, class:"btn btn-success btn-sm" %>
          <% end %>
       <% end %>
     </th>
