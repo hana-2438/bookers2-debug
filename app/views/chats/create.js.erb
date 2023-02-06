@@ -1,3 +1,2 @@
-$('.message').append("<p style='text-align: left;'><%= @chat.message %></p>");
-$('.js-form')[0].reset();
-$('error-alert').empty();
+$("#js_chat_list").html("<%= j(render 'chats/index', chats: @chats) %>");<!--$("#js_chat_list")はshow.htmlの<div>内に記述したid=js_chat_listのこと-->
+$(".message").val('');<!--.messageは部分テンプレート_formのtextfieldに記述したclass名-->

@@ -1,28 +1,15 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-6">
-
-
-      <h1><%= @user.name %> さんとのチャット</h1>
-
-
-      <div class="message" style="width: 400px;">
-        <% @chats.each do |chat| %>
-          <% if chat.user_id == current_user.id %>
-            <p style="text-align: left;"><%= chat.message %></p>
-          <% else %>
-            <P style="text-align: right;"><%= chat.message %></P>
-          <% end %>
-        <% end %>
+    <div class="col-8">
+      <div class="d-flex justify-content-between">
+        <h3><%= @user.name %> さんとのチャット</h1>
       </div>
-
-      <div class="error-explanation"></div><!--エラーメッセージの表示-->
-
-      <%= form_with model: @chat, class: "js-form" do |f| %>
-        <%= f.text_field :message %>
-        <%= f.hidden_field :room_id %>
-        <%= f.submit "SEND", class:"btn btn-sm btn-success chat-btn" %>
-      <% end %>
+      <div id = "js_chat_list">
+        <%= render 'chats/index', chats: @chats %>
+      </div>
+       <div>
+        <%= render 'chats/form', chat: @chat %>
+      </div>
     </div>
   </div>
 </div>

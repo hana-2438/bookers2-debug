@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   # DM機能のアソシエーション
-  has_many :user_rooms, dependent: :destroy
-  has_many :chats, dependent: :destroy
+  has_many :user_rooms
+  has_many :chats
   has_many :rooms, through: :user_rooms
 
   has_many :books, dependent: :destroy

@@ -1,49 +1,44 @@
 class ChatsController < ApplicationController
+  before_action :following_check, only: [:show]
 
   def show
-    @user = User.find(params[:id])#チャットする相手が誰なのか
-    rooms = current_user.user_rooms.pluck(:room_id)#ログイン中のユーザー（自分）の部屋情報をすべて取得し、roomsに代入
-    user_room = UserRoom.find_by(user_id: @user.id, room_id: rooms)#find_byメソッドを使ってチャットする相手とのルームがあるか確認し、それをrser_roomsに代入する
-
-    if user_room.nil?#共通のユーザールームがない場合
-      # 新しくチャットルームを作る
-      @room = Room.new
-      @room.save
-      # そのルームidを共通して持つ中間テーブルを、相手と自分の二人分作る
-      UserRoom.create(user_id: @user.id, room_id: @room.id)
-      UserRoom.create(user_id: current_user.id, room_id: @room.id)
+    @user = User.find(params[:id])#①送られてきたidでuserを検索する
+    rooms = current_user.user_rooms.pluck(:room_id)#②currrent_userの持つroom_idを取得
+    user_rooms = UserRoom.find_by(user_id: @user.id, room_id: rooms)#①②を用いて合致するUserRoomがあるか探す
+    if user_rooms.nil?#Roomが見つからなかった場合
+      chat_room = Room.new#新しくRoomを作成
+      chat_room.save
+      UserRoom.create(user_id: current_user.id, room_id: chat_room.id)#自分のUserRoom作成。createは保存もしてくれるのでsave不要
+      UserRoom.create(user_id: @user.id, room_id: chat_room.id)#相手のUserRoom作成。createは保存もしてくれるのでsave不要
     else
-      # 共通のチャットルームがあれば、それに紐づくroomを「@room」に代入する
-      @room = user_room.room
+      chat_room = user_rooms.room#user_roomのroomの情報を抜き出してroomのidを取得する
+      #roomはuserモデルで記載したhas_many :room, through: :user_roomsのroom
     end
-    # 「チャット履歴（@chats)の取得」「新規投稿用の空インスタンス(@chat)作成
-    @chats = @room.chats
-    @chat = Chat.new(room_id: @room.id)
+    @chats = chat_room.chats#roomのidに合致するchatの内容を取得する
+    #chatsはuserモデルで記載したhas_many :chatsのchats
+    @chat = Chat.new(room_id: chat_room.id)#空のインスタンスの作成
   end
 
   def create
-    # @chat = current_user.chats.new(chat_params)#ストロングパラメータを引数に@chatを作成
-    # render :error unless @chat.save
-
-    @chat = Chat.new(chat_params)
-    # save状況に応じて返すビューを条件分岐する
-    respond_to do |format|
-      if @chat.save
-        # format.html { redirect_to @chat }#htmlで返す場合、showアクションを実行し詳細ページを表示
-        format.js#create.js.erbが呼び出される
-      else
-        # format.html { render :show }#htmlで返す場合、show.html.erbを表示
-        format.js { render :errors }
-      end
-    end
+    @chat = current_user.chats.new(chat_params)
+    @chat.save
+    # redirect_to request.referer　非同期のためredirect_toは消す。こうすることでcreate.js.erbを探しに行ってくれる
+    chat_room = @chat.room#render処理と同じように値を渡す（roomのidを取得するための記述）
+    @chats = chat_room.chats#render処理と同じように値を渡す（取得したroomのidをもとにchatの内容を取得する）
   end
-
 
 
   private
 
   def chat_params
-    params.require(:chat).permit(:message, :room_id).merge(user_id: current_user.id)
+    params.require(:chat).permit(:message, :room_id)
+  end
+
+  def following_check
+    user = User.find(params[:id])
+    unless current_user.following?(user) && user.following?(current_user)
+      redirect_to books_path
+    end
   end
 
 

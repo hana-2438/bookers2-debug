@@ -1,0 +1,5 @@
+<%= form_with model: chat, local: false do |f| %><!--local: false追加-->
+  <%= f.text_field :message, class:'message' %><!--class:'message'追加-->
+  <%= f.hidden_field :room_id %>
+  <%= f.submit "SEND", class:"btn btn-sm btn-success chat-btn" %>
+<% end %>
