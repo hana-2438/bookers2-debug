@@ -7,9 +7,12 @@ class User < ApplicationRecord
   has_many :user_rooms
   # 閲覧数のアソシエーション
   has_many :read_counts, dependent: :destroy
-  
+
   has_many :chats
   has_many :rooms, through: :user_rooms
+
+  #group_userに対するアソシエーション
+  has_many :group_users
   has_many :books, dependent: :destroy
   has_many :book_comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
