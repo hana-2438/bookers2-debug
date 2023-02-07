@@ -3,21 +3,21 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   #投稿者以外のユーザーが投降者専用のページに遷移できないようにするための記述（URLの直打ち）
   before_action :ensure_correct_user, only: [:edit, :update]
-  
+
   def index
     @book = Book.new
     @groups = Group.all
   end
-  
+
   def show
     @book = Book.new
     @group = Group.find(params[:id])
   end
-  
+
   def new
     @group = Group.new
-  end 
-  
+  end
+
   def create
     @group = Group.new(group_params)
     @group.owner_id = current_user.id
@@ -27,11 +27,11 @@ class GroupsController < ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
-    
+
   end
-  
+
   def update
     if @group.update(group_params)
       redirect_to groups_path
@@ -39,20 +39,20 @@ class GroupsController < ApplicationController
       render "edit"
     end
   end
-  
-  
+
+
   private
-  
+
   def group_params
     params.require(:group).permit(:name, :introduction, :image)
   end
-  
+
   def ensure_correct_user
-    @group = Group.find(arams[:id])
+    @group = Group.find(params[:id])
     unless @group.owner_id == current_user.id
       redirect_to groups_path
     end
   end
-  
+
 end
 
