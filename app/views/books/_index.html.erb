@@ -4,6 +4,9 @@
       <th></th>
       <th>Title</th>
       <th>Opinion</th>
+      <th></th>
+      <th></th>
+      <th></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,6 +23,7 @@
           <%= render "books/favorite", book: book %>
         </td>
         <td>コメント数：<%= "#{book.book_comments.count}" %></td><!--コメント件数-->
+        <td class="small">閲覧数：<%= book.read_counts.count %></td><!--閲覧数のカウント-->
       </tr>
     <% end %>
   </tbody>

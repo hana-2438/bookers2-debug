@@ -11,7 +11,7 @@
   		<table class='table'>
   		  <tr>
           <td><%= link_to(@book.user) do %>
-            <%= image_tag @book.user.get_profile_image, size:"100x100" %><br>
+            <%= image_tag @book.user.get_profile_image, size:"90x90" %><br>
             <%= @book.user.name %>
             <% end %>
           </td>
@@ -20,7 +20,8 @@
           <td id="favorite_buttons_<%= @book.id %>">
             <%= render "books/favorite", book: @book %>
           </td>
-          <td>コメント数：<%= "#{@book.book_comments.count}" %></td><!--コメント件数-->
+          <td class="small">コメント数：<%= "#{@book.book_comments.count}" %></td><!--コメント件数-->
+          <td class="small">閲覧数：<%= @book.read_counts.count %></td><!--閲覧数のカウント-->
           <% if @book.user == current_user %>
             <td><%= link_to 'Edit', edit_book_path(@book.id), class: "btn btn-sm btn-success" %></td>
           <% end %>

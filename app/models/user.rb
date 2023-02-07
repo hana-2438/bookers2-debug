@@ -5,17 +5,25 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   # DM機能のアソシエーション
   has_many :user_rooms
+  # 閲覧数のアソシエーション
+  has_many :read_counts, dependent: :destroy
+  
   has_many :chats
   has_many :rooms, through: :user_rooms
-
   has_many :books, dependent: :destroy
   has_many :book_comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
+
+
   # フォロー機能のアソシエーション（フォローをした、されたの関係）
+  #フォローした（class_nameでテーブルを渡す。foreign_keyでフォローした人を指定　）
   has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  #フォローされた（foreign_keyでフォローされた人を指定する）
   has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   # 一覧画面で使うアソシエーション
+  #とあるフォローされたユーザーをフォローした人の一覧を中間テーブルを介して取得する（フォロワー一覧）
   has_many :followers, through: :reverse_of_relationships, source: :follower
+  #とあるフォローしたユーザーにフォローされた人の一覧を中間テーブルを介して取得する（フォロー
   has_many :followings, through: :relationships, source: :followed
   has_one_attached :profile_image
 

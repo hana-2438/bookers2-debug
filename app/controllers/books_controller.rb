@@ -4,6 +4,8 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @book_comment = BookComment.new
+    read_count = ReadCount.new(book_id: @book.id, user_id: current_user.id)
+    read_count.save
   end
 
   def index
@@ -11,9 +13,10 @@ class BooksController < ApplicationController
     to  = Time.current.at_end_of_day
     from  = (to - 6.day).at_beginning_of_day
     @books = Book.includes(:favorites).sort_by {|x| x.favorites.where(created_at: from...to).size}.reverse
-    #infoテンプレのnewbook用 
+    #infoテンプレのnewbook用
     @book = Book.new
     @book_comment = BookComment.new
+    
   end
 
   def create
