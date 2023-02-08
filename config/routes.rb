@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     get 'followers' => 'relationships#followers', as: 'followers'
   end
   # groupのルーティング（destroy以外のアクションを実行する）
-  resources :groups, except: [:destroy]
+  resources :groups do
+    get"join" => "groups#join"
+  end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get "home/about"=>"homes#about", as: 'about'

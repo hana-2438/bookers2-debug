@@ -14,6 +14,12 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
   end
 
+  def join
+    @group = Group.find(params[:group_id])#Groupのidを@groupに代入する
+    @group.users << current_user#「<<」は結合という意味。よって、@group.usersにcurrent_userを追加しなさいという記述
+    redirect_to groups_path
+  end
+
   def new
     @group = Group.new
   end
@@ -21,6 +27,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.owner_id = current_user.id
+    @group.users << current_user
     if @group.save
       redirect_to groups_path
     else
