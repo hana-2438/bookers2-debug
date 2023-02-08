@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = current_user.owned_groups.new(group_params)
+    @group = Group.new(group_params)
     @group.owner_id = current_user.id
     @group.users << current_user#@group.user(新規作成したグループuser)にcurrent_userを追加する
     if @group.save
