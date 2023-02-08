@@ -21,4 +21,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get "home/about"=>"homes#about", as: 'about'
   get 'search' => "searches#search"
+  #メールに関する記述
+  get "join" => "groups#join"
+  get "new/mail" => "groups#new_mail"
+  get "send/mail" => "groups#send_mail"
 end

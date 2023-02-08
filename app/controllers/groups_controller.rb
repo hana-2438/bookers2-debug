@@ -53,6 +53,18 @@ class GroupsController < ApplicationController
     redirect_to groups_path
   end
 
+  def new_mail
+    @group = Group.find(params[:format])
+  end
+
+  def send_mail
+    @group = Group.find(params[:format])
+    group_users = @group.users
+    @mail_title = params[:mail_title]#new_mail.htmlのform_withで入力された値を受け取っている
+    @mail_content = params[:mail_content]#new_mail.htmlのform_withで入力された値を受け取っている
+    ContactMailer.send_mail(@mail_title, @mail_content,group_users).deliver#上２行で受け取った値をsend_mailアクションへ渡している
+  end
+
 
   private
 
