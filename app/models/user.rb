@@ -13,6 +13,9 @@ class User < ApplicationRecord
 
   #group_userに対するアソシエーション
   has_many :group_users
+  has_many :groups, through: :group_users, dependent: :destroy
+  #以下、グループオーナー表示のための記述
+  has_many :owned_groups, class_name: "Group"
   has_many :books, dependent: :destroy
   has_many :book_comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
