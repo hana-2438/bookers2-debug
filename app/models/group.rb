@@ -2,7 +2,7 @@ class Group < ApplicationRecord
   has_many :group_users
   # userの情報をgroup_usersを介してとってくる
   has_many :users, through: :group_users, dependent: :destroy
-
+  belongs_to :owner, class_name: 'User'
   validates :name, presence: true
   validates :introduction, presence: true
   has_one_attached :image
